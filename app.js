@@ -1,3 +1,4 @@
+require("dotenv").config();
 const Discord = require("discord.js");
 const axios = require("axios");
 const sgMail = require("@sendgrid/mail");
@@ -7,6 +8,7 @@ const FileSync = require("lowdb/adapters/FileSync");
 
 const adapter = new FileSync("db.json");
 const db = low(adapter);
+console.log(process.env);
 
 sgMail.setApiKey(process.env.SENDGRID);
 
@@ -137,7 +139,7 @@ function osallistujatCommand(args, receivedMessage) {
 
   receivedMessage.channel.send(
     `Ilmoittautuneita ${date}: ${
-      !users.length ? "Ei ilmoittautuneita." : users.join(", ")
+      !users.length ? "Ei ilmoittautuneita" : users.join(", ")
     }.`
   );
 }
