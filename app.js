@@ -249,7 +249,6 @@ async function ilmoCommand(args, receivedMessage) {
           })
           .write();
       }
-      receivedMessage.channel.send("Ilmoittautuminen kirjattu");
       receivedMessage.react("👍");
     } catch (error) {
       console.error(error);
