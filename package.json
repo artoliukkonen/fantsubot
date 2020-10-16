@@ -1,9 +1,9 @@
 {
   "name": "fantsu-scraper",
   "version": "0.0.1",
-  "main": "handler.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon --ignore db.json src/bot.js",
+    "start": "nodemon --ignore db.json app.js",
     "test": "jest",
     "lint": "node node_modules/eslint/bin/eslint.js ."
   },
