@@ -15,14 +15,14 @@ sgMail.setApiKey(process.env.SENDGRID);
 const ilmoMsg = {
   to: process.env.EMAIL_RECEIVER,
   from: process.env.EMAIL_SENDER,
-  subject: "MTG ilmoittautuminen (Discord)",
+  subject: "MTG/F&B ilmoittautuminen (Discord)",
   text: "",
 };
 
 const peruMsg = {
   to: process.env.EMAIL_RECEIVER,
   from: process.env.EMAIL_SENDER,
-  subject: "MTG peruminen (Discord)",
+  subject: "MTG/F&B peruminen (Discord)",
   text: "",
 };
 
@@ -36,7 +36,8 @@ const parseDate = (date) => {
   if (!dy) {
     dy = new Date().getFullYear();
   }
-  return `${parseInt(dy)}-${parseInt(dm)}-${parseInt(dd)}`;
+  // Format as 20YY-M-D
+  return `${parseInt(dy).padStart(4, "20")}-${parseInt(dm)}-${parseInt(dd)}`;
 };
 
 const getData = async (url) => {
@@ -53,7 +54,7 @@ const getData = async (url) => {
 function processCommand(receivedMessage) {
   let fullCommand = receivedMessage.content.substr(1); // Remove the leading exclamation mark
   let splitCommand = fullCommand.split(" "); // Split the message up in to pieces for each space
-  let primaryCommand = splitCommand[0]; // The first word directly after the exclamation is the command
+  let primaryCommand = splitCommand[0].toLowerCase(); // The first word directly after the exclamation is the command
   let args = splitCommand.slice(1); // All other words are arguments/parameters/options for the command
 
   console.log("Command received: " + primaryCommand);
@@ -82,7 +83,7 @@ function processCommand(receivedMessage) {
 
 async function cancelCommand(args, receivedMessage) {
   if (args.length < 1) {
-    receivedMessage.channel.send("Anna päivämäärä. Esim. `!peru 1.1.2020`");
+    receivedMessage.channel.send("Anna päivämäärä. Esim. `!peru 15.5.`");
     receivedMessage.react("👎");
 
     return;
@@ -105,7 +106,6 @@ async function cancelCommand(args, receivedMessage) {
           .remove({ userId: receivedMessage.author.username, date: ddate })
           .write();
       }
-      receivedMessage.channel.send("Ilmoittautuminen peruttu");
       receivedMessage.react("👍");
     } catch (error) {
       console.error(error);
@@ -124,7 +124,7 @@ async function cancelCommand(args, receivedMessage) {
 function osallistujatCommand(args, receivedMessage) {
   if (args.length < 1) {
     receivedMessage.channel.send(
-      "Anna päivämäärä. Esim. `!osallistujat 1.1.2020`"
+      "Anna päivämäärä. Esim. `!osallistujat 15.5.`"
     );
     receivedMessage.react("👎");
 
@@ -135,7 +135,6 @@ function osallistujatCommand(args, receivedMessage) {
   const ddate = parseDate(date);
 
   const users = db.get("ilmot").filter({ date: ddate }).map("userId").value();
-  console.log(users);
 
   receivedMessage.channel.send(
     `Ilmoittautuneita ${date}: ${
@@ -161,7 +160,7 @@ async function listCommand(args, receivedMessage) {
 async function ilmoCommand(args, receivedMessage) {
   if (args.length < 1) {
     receivedMessage.channel.send(
-      "Anna päivämäärä ja nimi. Esim. `!ilmo 1.1.2020 Matti Meikäläinen`"
+      "Anna päivämäärä ja nimi. Esim. `!ilmo 15.5. Matti Meikäläinen`"
     );
     receivedMessage.react("👎");
 
@@ -195,10 +194,19 @@ async function ilmoCommand(args, receivedMessage) {
     return;
   }
 
+  if (new Date().getWeek() !== new Date(ddate).getWeek()) {
+    receivedMessage.channel.send(
+      "Et voi ilmoittautua tulevien viikkojen turnauksiin."
+    );
+    receivedMessage.react("👎");
+
+    return;
+  }
+
   if (!name) {
     if (!user) {
       receivedMessage.channel.send(
-        `Käyttäjää ${receivedMessage.author.username} ei löytynyt tietokannasta. Anna nimesi viimeisenä parametrina. Esim. \`!ilmo 1.1.2020 Matti Meikäläinen\`"`
+        `Käyttäjää ${receivedMessage.author.username} ei löytynyt tietokannasta. Anna nimesi viimeisenä parametrina. Esim. \`!ilmo 15.5. Matti Meikäläinen\`"`
       );
       receivedMessage.react("👎");
 
@@ -236,7 +244,7 @@ async function ilmoCommand(args, receivedMessage) {
     return;
   }
 
-  ilmoMsg.text = `${name} (Discord: ${receivedMessage.author.username}) ilmoittautuu MTG peleihin ${date}`;
+  ilmoMsg.text = `${name} (Discord: ${receivedMessage.author.username}) ilmoittautuu MTG/F&B peleihin ${date}`;
 
   (async () => {
     try {
