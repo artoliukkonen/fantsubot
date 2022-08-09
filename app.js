@@ -153,7 +153,7 @@ async function osallistujatCommand(args, receivedMessage) {
     !users.length ? "Ei ilmoittautuneita" : users.join(", ")
   }`;
 
-  if (officialEvent) {
+  if (officialEvent && officialEvent.players) {
     msg += ` (virallisessa kalenterissa ${officialEvent.players})`;
   }
 
