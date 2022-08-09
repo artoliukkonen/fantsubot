@@ -31,6 +31,15 @@ const listCommands = ["pelit", "kalenteri", "tapahtumat"];
 const osallistujatCommands = ["osallistujat", "pelaajat"];
 const cancelCommands = ["peru", "pois"];
 
+/*
+For some reason node on server claims this does not exist
+So let's create it manually
+*/
+Date.prototype.getWeek = function () {
+  var dt = new Date(this.getFullYear(), 0, 1);
+  return Math.ceil(((this - dt) / 86400000 + dt.getDay() + 1) / 7);
+};
+
 const parseDate = (date) => {
   let [dd, dm, dy] = date.split(".");
   if (!dy) {
