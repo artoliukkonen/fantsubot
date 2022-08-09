@@ -37,7 +37,20 @@ const parseDate = (date) => {
     dy = new Date().getFullYear();
   }
   // Format as 20YY-M-D
-  return `${parseInt(dy).padStart(4, "20")}-${parseInt(dm)}-${parseInt(dd)}`;
+  return `${parseInt(dy).toString().padStart(4, "20")}-${parseInt(
+    dm
+  )}-${parseInt(dd)}`;
+};
+
+const dateToApiDate = (date) => {
+  let [dd, dm, dy] = date.split(".");
+  if (!dy) {
+    dy = new Date().getFullYear();
+  }
+  // Format as DD.MM.20YY
+  return `${parseInt(dd).toString().padStart(2, "0")}.${parseInt(dm)
+    .toString()
+    .padStart(2, "0")}.${parseInt(dy).toString().padStart(4, "20")}`;
 };
 
 const getData = async (url) => {
@@ -121,26 +134,30 @@ async function cancelCommand(args, receivedMessage) {
   })();
 }
 
-function osallistujatCommand(args, receivedMessage) {
+async function osallistujatCommand(args, receivedMessage) {
+  let date = "";
   if (args.length < 1) {
-    receivedMessage.channel.send(
-      "Anna päivämäärä. Esim. `!osallistujat 15.5.`"
-    );
-    receivedMessage.react("👎");
-
-    return;
+    date = `${new Date().getDate()}.${new Date().getMonth() + 1}.`;
+  } else {
+    date = args.shift();
   }
-
-  const date = args.shift();
   const ddate = parseDate(date);
 
   const users = db.get("ilmot").filter({ date: ddate }).map("userId").value();
 
-  receivedMessage.channel.send(
-    `Ilmoittautuneita ${date}: ${
-      !users.length ? "Ei ilmoittautuneita" : users.join(", ")
-    }.`
+  const events = await getData(process.env.EVENT_API);
+  const officialEvent = events.find(
+    (event) => event.date === dateToApiDate(date)
   );
+  let msg = `Ilmoittautuneita ${date}: ${
+    !users.length ? "Ei ilmoittautuneita" : users.join(", ")
+  }`;
+
+  if (officialEvent) {
+    msg += ` (virallisessa kalenterissa ${officialEvent.players})`;
+  }
+
+  receivedMessage.channel.send(msg);
 }
 
 async function listCommand(args, receivedMessage) {
