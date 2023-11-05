@@ -4,3 +4,4 @@ DEV=true
 EVENT_API=https://wr2ywpya12.execute-api.eu-west-1.amazonaws.com/dev
 EMAIL_SENDER=me@example.com
 EMAIL_RECEIVER=my-city@fantasiapelit.com
+TZ='Europe/Helsinki'

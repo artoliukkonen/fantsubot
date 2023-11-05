@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": ["es6"],
+    "module": "node16",
+    "moduleResolution": "node16",
+    "rootDir": "src",
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "outDir": "build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true
+  }
+}
