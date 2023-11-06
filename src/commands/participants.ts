@@ -29,6 +29,6 @@ export const participantsCommand = async (receivedMessage: DiscordMessage) => {
       msg += ` (virallisessa kalenterissa ${event.players})`;
     }
     msg += "\n";
-    receivedMessage.channel.send(msg);
   });
+  receivedMessage.channel.send(msg);
 };
