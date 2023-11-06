@@ -2,6 +2,9 @@ import { Message } from "discord.js";
 import { abbreviationToDay } from "../utils/utils.js";
 import sgMail from "@sendgrid/mail";
 import { deleteReg, getUser } from "../utils/db.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const peruMsg = {
   to: process.env.EMAIL_RECEIVER,

@@ -7,6 +7,9 @@ import {
 import { addReg, getReg, getUser } from "../utils/db.js";
 import sgMail from "@sendgrid/mail";
 import { Message } from "discord.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const ilmoMsg = {
   to: process.env.EMAIL_RECEIVER ?? "",
@@ -115,7 +118,9 @@ export const regCommand = async (args: string[], receivedMessage: Message) => {
 
       receivedMessage.react("👍");
     } catch (error) {
+      console.log(ilmoMsg);
       console.error(error);
+      console.log((error as any).response.body);
       receivedMessage.react("👎");
       receivedMessage.channel.send(
         "Virhe ilmoittautumisessa. Raportoi @artoliukkonen ."
