@@ -4,6 +4,24 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(process.env.SENDGRID ?? "");
 
+if (
+  !process.env.DISCORD ||
+  !process.env.SENDGRID ||
+  !process.env.EVENT_API ||
+  !process.env.EMAIL_RECEIVER ||
+  !process.env.EMAIL_SENDER
+) {
+  console.error("Missing environment variables");
+  console.log(
+    process.env.DISCORD,
+    process.env.SENDGRID,
+    process.env.EVENT_API,
+    process.env.EMAIL_RECEIVER,
+    process.env.EMAIL_SENDER
+  );
+  process.exit(1);
+}
+
 const client = new Client({
   intents: [
     GatewayIntentBits.DirectMessages,

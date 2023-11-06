@@ -9,7 +9,7 @@ import sgMail from "@sendgrid/mail";
 import { Message } from "discord.js";
 
 const ilmoMsg = {
-  to: process.env.EMAIL_RECEIVER,
+  to: process.env.EMAIL_RECEIVER ?? "",
   from: process.env.EMAIL_SENDER ?? "",
   subject: "MTG/F&B ilmoittautuminen (Discord)",
   text: "",
