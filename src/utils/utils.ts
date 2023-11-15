@@ -113,7 +113,13 @@ export const getNextDay = (dayName: string) => {
 
   const diff = day - now;
 
-  const nextDayTimestamp = date.getTime() + 1000 * 60 * 60 * 24 * diff;
+  let nextDayTimestamp = date.getTime() + 1000 * 60 * 60 * 24 * diff;
+
+  // for sundays, use a week from the calculated date,
+  // since finnish calendar starts from monday
+  if (dayName === "sunday") {
+    nextDayTimestamp += 1000 * 60 * 60 * 24 * 7;
+  }
 
   // Get the next day
   return new Date(nextDayTimestamp);
