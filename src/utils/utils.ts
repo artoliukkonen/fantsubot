@@ -115,9 +115,10 @@ export const getNextDay = (dayName: string) => {
 
   let nextDayTimestamp = date.getTime() + 1000 * 60 * 60 * 24 * diff;
 
-  // for sundays, use a week from the calculated date,
-  // since finnish calendar starts from monday
-  if (dayName === "sunday") {
+  // Sundays are the last day of the week in Finnish calendar
+  // move sunday registrations a week ahead
+  // except on sundays when the earlier logic works correctly
+  if (dayName === "sunday" && now !== 0) {
     nextDayTimestamp += 1000 * 60 * 60 * 24 * 7;
   }
 
