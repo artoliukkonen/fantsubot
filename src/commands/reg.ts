@@ -84,7 +84,7 @@ export const regCommand = async (args: string[], receivedMessage: Message) => {
       );
       receivedMessage.react("👎");
 
-      // return true;
+      return true;
     }
 
     const ilmo = getReg(receivedMessage.author.username, regDate);
