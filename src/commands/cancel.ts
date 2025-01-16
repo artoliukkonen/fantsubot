@@ -23,6 +23,13 @@ export const cancelCommand = async (
 
     return;
   }
+  if (args.length > 1) {
+    receivedMessage.channel.send("Voit perua vain yhden päivämäärän kerrallaan");
+    receivedMessage.react("👎");
+
+    return;
+  }
+
   const date = args.shift() ?? "";
   const ddate = abbreviationToDay(date);
   const user = getUser(receivedMessage.author.username);
