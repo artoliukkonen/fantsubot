@@ -1,10 +1,18 @@
 import { Message } from "discord.js";
 import { abbreviationToDay } from "../utils/utils.js";
-import sgMail from "@sendgrid/mail";
 import { deleteReg, getUser } from "../utils/db.js";
 import dotenv from "dotenv";
+import formData from "form-data";
+import Mailgun from "mailgun.js";
 
 dotenv.config();
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+  username: "api",
+  key: process.env.MAILGUN_API_KEY ?? "",
+  url: "https://api.eu.mailgun.net",
+});
 
 const peruMsg = {
   to: process.env.EMAIL_RECEIVER,
@@ -41,7 +49,7 @@ export const cancelCommand = async (
   (async () => {
     try {
       if (!process.env.DEV) {
-        await sgMail.send(peruMsg);
+        await mg.messages.create(process.env.MAILGUN_DOMAIN ?? "", peruMsg);
       }
       deleteReg(receivedMessage.author.username, ddate);
       receivedMessage.react("👍");

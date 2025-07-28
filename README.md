@@ -4,7 +4,7 @@ Discord bot for signing up for [Fantasiapelit.fi](http://fantasiapelit.fi) Magic
 
 For now in Finnish only, and middleware is fetching the games only for Jyväskylä shop.
 
-Using Sendgrid to send the email to Fantasiapelit.
+Using Mailgun to send the email to Fantasiapelit.
 
 ## Development
 

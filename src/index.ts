@@ -1,8 +1,5 @@
 import { Client, GatewayIntentBits, Partials } from "discord.js";
 import { processCommand } from "./utils/utils.js";
-import sgMail from "@sendgrid/mail";
-
-sgMail.setApiKey(process.env.SENDGRID ?? "");
 
 const client = new Client({
   intents: [

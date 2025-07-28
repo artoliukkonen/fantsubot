@@ -5,11 +5,19 @@ import {
   parseDate,
 } from "../utils/utils.js";
 import { addReg, getReg, getUser } from "../utils/db.js";
-import sgMail from "@sendgrid/mail";
 import { Message } from "discord.js";
 import dotenv from "dotenv";
+import formData from "form-data";
+import Mailgun from "mailgun.js";
 
 dotenv.config();
+
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+  username: "api",
+  key: process.env.MAILGUN_API_KEY ?? "",
+  url: "https://api.eu.mailgun.net",
+});
 
 const ilmoMsg = {
   to: process.env.EMAIL_RECEIVER ?? "",
@@ -106,7 +114,7 @@ export const regCommand = async (args: string[], receivedMessage: Message) => {
   (async () => {
     try {
       if (!process.env.DEV) {
-        await sgMail.send(ilmoMsg);
+        await mg.messages.create(process.env.MAILGUN_DOMAIN ?? "", ilmoMsg);
       } else {
         console.log(ilmoMsg.text);
       }

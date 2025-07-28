@@ -1,4 +1,5 @@
-SENDGRID=abc123
+MAILGUN_API_KEY=abc123
+MAILGUN_DOMAIN=your-domain.com
 DISCORD=abc123
 DEV=true
 EVENT_API=https://wr2ywpya12.execute-api.eu-west-1.amazonaws.com/dev
