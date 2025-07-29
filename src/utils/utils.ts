@@ -4,6 +4,7 @@ import {
   participantsCommand,
   regCommand,
   regUserCommand,
+  statsCommand,
 } from "../commands/index.js";
 import axios from "axios";
 import dotenv from "dotenv";
@@ -18,6 +19,7 @@ const listCommands = ["pelit", "kalenteri", "tapahtumat"];
 const osallistujatCommands = ["osallistujat", "pelaajat"];
 const cancelCommands = ["peru", "pois"];
 const regUserCommands = ["reg", "register"];
+const statsCommands = ["stats", "tilastot"];
 
 // https://gist.github.com/catamphetamine/c0e2f21f1063b11a90f5790eadfcefa4
 export const getWeek = (date: Date, dowOffset = 0) => {
@@ -165,6 +167,8 @@ export function processCommand(receivedMessage: Message) {
     regCommand(args, receivedMessage);
   } else if (regUserCommands.includes(primaryCommand)) {
     regUserCommand(args, receivedMessage);
+  } else if (statsCommands.includes(primaryCommand)) {
+    statsCommand(args, receivedMessage);
   }
 
   if (process.env.DEV) {
